@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="TOP_CENTER" prefHeight="869.0" prefWidth="1429.0" spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.studytoolserver.cashflow.FinancialHistory">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <Region prefHeight="0.0" prefWidth="1389.0" />
+   <VBox maxWidth="511.0" prefHeight="149.0" prefWidth="511.0" style="-fx-min-width: 1; -fx-border-color: black; -fx-border-radius: 16; -fx-background-color: #dfdfdf; -fx-background-radius: 16; -fx-padding: 12;">
+      <children>
+         <Text fill="#616161" strokeType="OUTSIDE" strokeWidth="0.0" text="Balance:" wrappingWidth="123.7294921875">
+            <font>
+               <Font name="Inter Regular" size="28.0" />
+            </font>
+         </Text>
+         <Region prefHeight="7.0" prefWidth="485.0" />
+         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <children>
+               <Text id="money_value" fx:id="balance" strokeLineCap="ROUND" strokeType="OUTSIDE" strokeWidth="0.0" text="\$4,325.33" textAlignment="CENTER" wrappingWidth="468.0">
+                  <font>
+                     <Font name="Inter ExtraBold" size="71.0" />
+                  </font>
+               </Text>
+            </children>
+         </HBox>
+      </children>
+   </VBox>
+   <HBox prefHeight="652.0" prefWidth="1389.0">
+      <children>
+         <ScrollPane prefHeight="883.0" prefWidth="705.0" style="-fx-fit-to-width: true; -fx-border-color: white; -fx-background-color: white;">
+            <content>
+               <VBox fx:id="financialHistory" alignment="TOP_CENTER" prefHeight="643.0" prefWidth="705.0" style="-fx-padding: 20; -fx-max-height: Infinity;">
+                  <children>
+                     <HBox alignment="BOTTOM_RIGHT" prefHeight="23.0" prefWidth="652.0">
+                        <children>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Financial History">
+                              <font>
+                                 <Font name="Inter Display Black" size="36.0" />
+                              </font>
+                           </Text>
+                           <Region prefHeight="44.0" prefWidth="114.0" />
+                           <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" style="-fx-background-color: #ff3503; -fx-border-color: black; -fx-background-radius: 7; -fx-border-radius: 6;" text="-" textFill="WHITE">
+                              <font>
+                                 <Font name="Inter ExtraBold" size="13.0" />
+                              </font>
+                           </Button>
+                           <Region prefHeight="44.0" prefWidth="5.0" />
+                           <Button fx:id="newHistory" mnemonicParsing="false" onAction="#handleNew" prefHeight="24.0" prefWidth="24.0" style="-fx-background-color: #009605; -fx-border-color: black; -fx-background-radius: 6; -fx-border-radius: 6;" text="+" textFill="WHITE">
+                              <font>
+                                 <Font name="Inter Black" size="13.0" />
+                              </font>
+                           </Button>
+                        </children>
+                     </HBox>
+                     <Region prefHeight="21.0" prefWidth="652.0" />
+                     <HBox id="filler" alignment="CENTER" prefHeight="88.0" prefWidth="652.0" style="-fx-border-color: black; -fx-background-radius: 16; -fx-border-radius: 16; -fx-padding: 20;">
+                        <children>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="You have no financial history.  Create some!" textAlignment="CENTER" wrappingWidth="520.5703125">
+                              <font>
+                                 <Font name="Inter Regular" size="24.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
+            </content>
+         </ScrollPane>
+         <VBox prefHeight="643.0" prefWidth="697.0" />
+      </children>
+   </HBox>
+</VBox>
