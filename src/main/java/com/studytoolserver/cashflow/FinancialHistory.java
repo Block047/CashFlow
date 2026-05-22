@@ -34,7 +34,10 @@ public class FinancialHistory {
     }
 
     public void updateTransactions(){
-        for (Transaction t : FinancialData.getTransactions()){
+        if (!FinancialData.getTransactions().isEmpty()) {
+            financialHistory.getChildren().remove(2);
+        }
+        for (Transaction t : FinancialData.getTransactions()) {
             Region spacer = new Region();
             spacer.setPrefHeight(11.0);
             financialHistory.getChildren().add(createTransactionRow(t.getAmount(), t.getDescription(), t.getDate()));
@@ -94,6 +97,7 @@ public class FinancialHistory {
         revertBtn.setPrefWidth(62.0);
         revertBtn.setMnemonicParsing(false);
         revertBtn.setStyle("-fx-background-color: #e13b12;");
+        revertBtn.setOnAction(event -> handleRevert());
 
         rightBox.getChildren().addAll(dateText, spacer3, revertBtn);
 
@@ -117,6 +121,13 @@ public class FinancialHistory {
 
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+
+            if (Double.isInfinite(Double.parseDouble(amt.getText()))){
+                Dialog<ButtonType> warn = new Dialog<>();
+                warn.setTitle("This number is too high!");
+                warn.setTitle("Please try a lower number");
+                return;
+            }
 
             if (Double.parseDouble(amt.getText()) < 0) {
                 Dialog<ButtonType> confirm = new Dialog<>();
@@ -170,5 +181,9 @@ public class FinancialHistory {
         if (b.getUserData() != null) {
             b.setStyle((String) b.getUserData());
         }
+    }
+
+    public void handleRevert(){
+        System.out.println("idkthisworksyay");
     }
 }

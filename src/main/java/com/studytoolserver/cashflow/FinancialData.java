@@ -13,7 +13,7 @@ import java.util.List;
 public class FinancialData {
 
     static String filePath = "data.json";
-    static String jarPath = System.getProperty("java.class.path");
+    static String jarPath = System.getProperty("user.dir");
     static List<Transaction> transactions = new ArrayList<>();
 
     public static void addTransaction(Transaction transaction) throws Exception {
