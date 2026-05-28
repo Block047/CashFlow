@@ -1,6 +1,5 @@
 package com.studytoolserver.cashflow;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -17,6 +16,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -49,8 +51,10 @@ public class FinancialHistory {
 
         HBox row = new HBox();
         row.setPrefHeight(88.0);
+        row.setMinHeight(88.0);
         row.setPrefWidth(652.0);
         row.setAlignment(Pos.CENTER_LEFT);
+        row.setUserData(date);
         row.setStyle("-fx-border-color: black; -fx-background-radius: 16; -fx-border-radius: 16;");
 
         Text moneyChangeText = new Text(String.format("$%,.2f", moneyChange));
@@ -87,7 +91,11 @@ public class FinancialHistory {
         rightBox.setPrefHeight(157.0);
         rightBox.setPrefWidth(97.0);
 
-        Text dateText = new Text(date.toString());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy")
+                .withZone(ZoneId.systemDefault());
+
+        String formattedDate = formatter.format(Instant.ofEpochMilli(date));
+        Text dateText = new Text(formattedDate);
 
         Region spacer3 = new Region();
         spacer3.setPrefHeight(5.0);
@@ -97,7 +105,7 @@ public class FinancialHistory {
         revertBtn.setPrefWidth(62.0);
         revertBtn.setMnemonicParsing(false);
         revertBtn.setStyle("-fx-background-color: #e13b12;");
-        revertBtn.setOnAction(event -> handleRevert());
+        revertBtn.setOnMouseClicked(this::handleRevert);
 
         rightBox.getChildren().addAll(dateText, spacer3, revertBtn);
 
@@ -183,7 +191,17 @@ public class FinancialHistory {
         }
     }
 
-    public void handleRevert(){
-        System.out.println("idkthisworksyay");
+    public void handleRevert(MouseEvent e) {
+        Button button = (Button) e.getSource();
+        HBox record = (HBox) button.getParent().getParent();
+        VBox container = (VBox) button.getParent().getParent().getParent();
+        container.getChildren().remove(record);
+        try {
+            FinancialData.removeTransactionByDate((Long) record.getUserData());
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
+        updateMoney();
     }
 }

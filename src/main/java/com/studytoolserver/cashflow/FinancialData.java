@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //Saves and allows access to financial data
 
@@ -21,6 +22,26 @@ public class FinancialData {
         System.out.println(transaction.toString());
         System.out.println(transactions.toString());
         save();
+    }
+
+    public static void removeTransaction(Transaction transaction) throws Exception {
+        transactions.remove(transaction);
+        save();
+    }
+
+    public static void removeTransactionByDate(Long date) throws Exception {
+        transactions.removeIf(t -> Objects.equals(t.getDate(), date));
+        save();
+    }
+
+
+    public static Transaction getTransaction(Long date){
+        for (Transaction t : transactions){
+            if (Objects.equals(t.getDate(), date)){
+                return t;
+            }
+        }
+        return null;
     }
 
     public static List<Transaction> getTransactions() {

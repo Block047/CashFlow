@@ -2,6 +2,8 @@ package com.studytoolserver.cashflow;
 
 //The transaction class :)
 
+import java.util.Objects;
+
 public class Transaction {
 
     Double amount;
@@ -26,5 +28,20 @@ public class Transaction {
     public Long getDate() {
         return date;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return Objects.equals(this.date, that.date) &&
+                Objects.equals(this.amount, that.amount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, amount);
+    }
+
 
 }
