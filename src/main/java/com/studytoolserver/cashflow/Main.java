@@ -22,7 +22,7 @@ public class Main extends Application {
 
         //Load stuff
 
-        FinancialHistory controller = fxmlLoader.getController();
+        Controller controller = fxmlLoader.getController();
 
         controller.setBudgetProgress(.75);
         controller.setGoalProgress(.1);

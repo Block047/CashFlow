@@ -24,7 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 
-public class FinancialHistory {
+public class Controller {
 
     @FXML
     private VBox financialHistory;
@@ -61,7 +61,8 @@ public class FinancialHistory {
         row.setPrefWidth(652.0);
         row.setAlignment(Pos.CENTER_LEFT);
         row.setUserData(date);
-        row.setStyle("-fx-border-color: black; -fx-background-radius: 16; -fx-border-radius: 16;");
+        row.setStyle("-fx-border-color: black; -fx-background-radius: 16; -fx-border-radius: 16; -fx-background-color: #a8a8a2");
+
 
         Text moneyChangeText = new Text(String.format("$%,.2f", moneyChange));
         if (moneyChange > 0) {
