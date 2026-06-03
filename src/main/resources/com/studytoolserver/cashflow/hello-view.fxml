@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" prefHeight="869.0" prefWidth="1429.0" spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.studytoolserver.cashflow.FinancialHistory">
+<VBox alignment="TOP_CENTER" prefHeight="869.0" prefWidth="1429.0" spacing="20.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.studytoolserver.cashflow.FinancialHistory">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -35,9 +38,9 @@
    </VBox>
    <HBox prefHeight="652.0" prefWidth="1389.0">
       <children>
-         <ScrollPane prefHeight="883.0" prefWidth="705.0" style="-fx-fit-to-width: true; -fx-border-color: white; -fx-background-color: white;">
+         <ScrollPane hbarPolicy="NEVER" prefHeight="883.0" prefWidth="705.0" style="-fx-fit-to-width: true; -fx-border-color: #434343; -fx-border-width: 4; -fx-background-color: #676767;" vbarPolicy="ALWAYS">
             <content>
-               <VBox fx:id="financialHistory" alignment="TOP_CENTER" prefHeight="643.0" prefWidth="705.0" style="-fx-padding: 20; -fx-max-height: Infinity;">
+               <VBox fx:id="financialHistory" alignment="TOP_CENTER" prefHeight="643.0" prefWidth="705.0" style="-fx-padding: 20; -fx-max-height: Infinity; -fx-background-color: #676767; color: grey;">
                   <children>
                      <HBox alignment="BOTTOM_RIGHT" prefHeight="23.0" prefWidth="652.0">
                         <children>
@@ -47,13 +50,13 @@
                               </font>
                            </Text>
                            <Region prefHeight="44.0" prefWidth="114.0" />
-                           <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" style="-fx-background-color: #ff3503; -fx-border-color: black; -fx-background-radius: 7; -fx-border-radius: 6;" text="-" textFill="WHITE">
+                           <Button mnemonicParsing="false" onAction="#handleNegative" prefHeight="24.0" prefWidth="24.0" style="-fx-background-color: #ff3503; -fx-border-color: black; -fx-background-radius: 7; -fx-border-radius: 6;" text="-" textFill="WHITE">
                               <font>
                                  <Font name="Inter ExtraBold" size="13.0" />
                               </font>
                            </Button>
                            <Region prefHeight="44.0" prefWidth="5.0" />
-                           <Button fx:id="newHistory" mnemonicParsing="false" onAction="#handleNew" prefHeight="24.0" prefWidth="24.0" style="-fx-background-color: #009605; -fx-border-color: black; -fx-background-radius: 6; -fx-border-radius: 6;" text="+" textFill="WHITE">
+                           <Button fx:id="newHistory" mnemonicParsing="false" onAction="#handlePositive" prefHeight="24.0" prefWidth="24.0" style="-fx-background-color: #009605; -fx-border-color: black; -fx-background-radius: 6; -fx-border-radius: 6;" text="+" textFill="WHITE">
                               <font>
                                  <Font name="Inter Black" size="13.0" />
                               </font>
@@ -61,20 +64,63 @@
                         </children>
                      </HBox>
                      <Region prefHeight="21.0" prefWidth="652.0" />
-                     <HBox id="filler" alignment="CENTER" prefHeight="88.0" prefWidth="652.0" style="-fx-border-color: black; -fx-background-radius: 16; -fx-border-radius: 16; -fx-padding: 20;">
-                        <children>
-                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="You have no financial history.  Create some!" textAlignment="CENTER" wrappingWidth="520.5703125">
-                              <font>
-                                 <Font name="Inter Regular" size="24.0" />
-                              </font>
-                           </Text>
-                        </children>
-                     </HBox>
+                      <Text fx:id="filler" text="No transactions yet!">
+                          <font>
+                              <Font name="Inter Regular" size="16.0" />
+                          </font>
+                      </Text>
                   </children>
                </VBox>
             </content>
          </ScrollPane>
-         <VBox prefHeight="643.0" prefWidth="697.0" />
+         <Region prefHeight="643.0" prefWidth="32.0" />
+         <VBox fx:id="financialHistory1" alignment="TOP_CENTER" prefHeight="643.0" prefWidth="705.0" style="-fx-padding: 20; -fx-max-height: Infinity; -fx-background-color: #676767; -fx-border-color: #434343; -fx-border-width: 4;">
+            <children>
+               <HBox prefHeight="100.0" prefWidth="200.0">
+                  <children>
+                     <Region prefHeight="200.0" prefWidth="447.0" />
+                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                        <children>
+                            <StackPane prefHeight="204.0" prefWidth="200.0">
+                                <Label fx:id="budgetLabel" alignment="CENTER" text="0%">
+                                    <font>
+                                        <Font name="Inter Bold" size="26.0" />
+                                    </font>
+                                </Label>
+                                <Canvas fx:id="budgetCanvas" height="200" width="200.0" />
+                            </StackPane>
+                           <Label text="Budget Progress" translateY="-30.0">
+                              <font>
+                                 <Font name="Inter Bold" size="14.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </VBox>
+                     <Region prefHeight="218.0" prefWidth="414.0" />
+                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                        <children>
+                           <StackPane prefHeight="200.0" prefWidth="630.0">
+                              <children>
+                                 <Label fx:id="savingLabel" alignment="CENTER" text="0%">
+                                    <font>
+                                       <Font name="Inter Bold" size="26.0" />
+                                    </font>
+                                 </Label>
+                                 <Canvas fx:id="savingCanvas" height="200" width="200" />
+                              </children>
+                           </StackPane>
+                           <Label text="Savings Progress" translateY="-30.0">
+                              <font>
+                                 <Font name="Inter Bold" size="14.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </VBox>
+                     <Region prefHeight="216.0" prefWidth="453.0" />
+                  </children>
+               </HBox>
+            </children>
+         </VBox>
       </children>
    </HBox>
 </VBox>

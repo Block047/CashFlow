@@ -24,6 +24,9 @@ public class Main extends Application {
 
         FinancialHistory controller = fxmlLoader.getController();
 
+        controller.setBudgetProgress(.75);
+        controller.setGoalProgress(.1);
+
         try {
             FinancialData.load();
             controller.updateMoney();

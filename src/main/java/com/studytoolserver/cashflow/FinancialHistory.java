@@ -1,16 +1,18 @@
 package com.studytoolserver.cashflow;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextField;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -28,6 +30,10 @@ public class FinancialHistory {
     private VBox financialHistory;
     @FXML
     private Text balance;
+    @FXML private Canvas budgetCanvas;
+    @FXML private Label budgetLabel;
+    @FXML private Canvas savingCanvas;
+    @FXML private Label savingLabel;
 
     public void updateMoney() {
         System.out.println("balance node: " + balance);
@@ -114,7 +120,7 @@ public class FinancialHistory {
         return row;
     }
 
-    public void handleNew() {
+    public void handleNew(Boolean isIncome) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Create New Transaction");
         dialog.setHeaderText("Enter the details of the new transaction.");
@@ -130,17 +136,22 @@ public class FinancialHistory {
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
 
-            if (Double.isInfinite(Double.parseDouble(amt.getText()))){
+            Double amtValue = Double.parseDouble(amt.getText());
+            if (!isIncome){
+                amtValue = -amtValue;
+            }
+
+            if (Double.isInfinite(amtValue)){
                 Dialog<ButtonType> warn = new Dialog<>();
                 warn.setTitle("This number is too high!");
                 warn.setTitle("Please try a lower number");
                 return;
             }
 
-            if (Double.parseDouble(amt.getText()) < 0) {
+            if (amtValue < 0) {
                 Dialog<ButtonType> confirm = new Dialog<>();
                 confirm.setTitle("Are you sure you want to make this transaction?");
-                confirm.setHeaderText("This transaction will cost you " + String.format("$%,.2f", Double.parseDouble(amt.getText())));
+                confirm.setHeaderText("This transaction will cost you " + String.format("$%,.2f", amtValue));
                 confirm.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
                 Optional<ButtonType> confirmResult = confirm.showAndWait();
                 if (confirmResult.isEmpty() || confirmResult.get() != ButtonType.OK) {
@@ -153,10 +164,12 @@ public class FinancialHistory {
             Region spacer = new Region();
             spacer.setPrefHeight(11.0);
 
-            financialHistory.getChildren().add(financialHistory.getChildren().size(), createTransactionRow(Double.parseDouble(amt.getText()), reason.getText(), System.currentTimeMillis()));
+            Long time = System.currentTimeMillis();
+
+            financialHistory.getChildren().add(financialHistory.getChildren().size(), createTransactionRow(amtValue, reason.getText(), time));
             financialHistory.getChildren().add(financialHistory.getChildren().size(), spacer);
             try {
-                new Transaction(Double.parseDouble(amt.getText()), reason.getText(), System.currentTimeMillis());
+                new Transaction(amtValue, reason.getText(), time);
                 updateMoney();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -202,6 +215,65 @@ public class FinancialHistory {
             throw new RuntimeException(ex);
         }
 
+        if (FinancialData.getTransactions().isEmpty()){
+            Text filler = new Text("No transactions yet!");
+            filler.setId("filler");
+            filler.setFont(Font.font("Inter Regular", 16.0));
+            container.getChildren().add(2, filler);
+        }
+
         updateMoney();
+    }
+
+    public void handleNegative(ActionEvent actionEvent) {
+        handleNew(false);
+    }
+
+    public void handlePositive(ActionEvent actionEvent) {
+        handleNew(true);
+    }
+
+    public void setBudgetProgress(double percentage) {
+        double size = 200;
+        double padding = 35;
+        double arcSize = size - (padding * 2);
+
+        GraphicsContext gc = budgetCanvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, size, size);
+
+        gc.setLineWidth(15);
+        gc.setLineCap(StrokeLineCap.ROUND);
+
+        // Background arc
+        gc.setStroke(Color.web("#e0e0e0"));
+        gc.strokeArc(padding, padding, arcSize, arcSize, 225, -270, ArcType.OPEN);
+
+        // Progress arc
+        gc.setStroke(percentage >= 1.0 ? Color.web("#e13b12") : Color.web("#1b9c1b"));
+        gc.strokeArc(padding, padding, arcSize, arcSize, 225, -270 * percentage, ArcType.OPEN);
+
+        budgetLabel.setText(String.format("%.0f%%", percentage * 100));
+    }
+
+    public void setGoalProgress(double percentage) {
+        double size = 200;
+        double padding = 35;
+        double arcSize = size - (padding * 2);
+
+        GraphicsContext gc = savingCanvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, size, size);
+
+        gc.setLineWidth(15);
+        gc.setLineCap(StrokeLineCap.ROUND);
+
+        // Background arc
+        gc.setStroke(Color.web("#e0e0e0"));
+        gc.strokeArc(padding, padding, arcSize, arcSize, 225, -270, ArcType.OPEN);
+
+        // Progress arc
+        gc.setStroke(percentage >= 1.0 ? Color.web("#e13b12") : Color.web("#1b9c1b"));
+        gc.strokeArc(padding, padding, arcSize, arcSize, 225, -270 * percentage, ArcType.OPEN);
+
+        savingLabel.setText(String.format("%.0f%%", percentage * 100));
     }
 }
