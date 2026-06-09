@@ -127,9 +127,9 @@ public class Controller {
         dialog.setHeaderText("Enter the details of the new transaction.");
         VBox content = new VBox(10);
         TextField amt = new TextField();
-        amt.setPromptText("Amount (positive for income, negative for expense)");
+        amt.setPromptText("Amount");
         TextField reason = new TextField();
-        reason.setPromptText("Reason and purpose of transaction");
+        reason.setPromptText("Note");
         content.getChildren().addAll(amt, reason);
         dialog.getDialogPane().setContent(content);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);

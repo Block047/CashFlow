@@ -63,11 +63,6 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.pdfsam.ui</groupId>
-            <artifactId>fx-progress-circle</artifactId>
-            <version>3.0.0</version>
-        </dependency>
     </dependencies>
 
     <build>

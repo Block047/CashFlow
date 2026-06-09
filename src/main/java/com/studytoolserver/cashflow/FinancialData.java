@@ -1,13 +1,11 @@
 package com.studytoolserver.cashflow;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.util.*;
 
 //Saves and allows access to financial data
 
@@ -16,6 +14,9 @@ public class FinancialData {
     static String filePath = "data.json";
     static String jarPath = System.getProperty("user.dir");
     static List<Transaction> transactions = new ArrayList<>();
+    static Map<String, Object> data = new HashMap<>();
+    static Double budget;
+    static Double savings;
 
     public static void addTransaction(Transaction transaction) throws Exception {
         transactions.add(transaction);
@@ -31,6 +32,7 @@ public class FinancialData {
 
     public static void removeTransactionByDate(Long date) throws Exception {
         transactions.removeIf(t -> Objects.equals(t.getDate(), date));
+        data.put("transactions", transactions);
         save();
     }
 
@@ -63,7 +65,7 @@ public class FinancialData {
         file.getParentFile().mkdirs();
         file.createNewFile();
         Writer writer = new FileWriter(file);
-        gson.toJson(transactions, writer);
+        gson.toJson(data, writer);
         writer.flush();
         writer.close();
     }
@@ -73,10 +75,12 @@ public class FinancialData {
         Gson gson = new Gson();
         File file = new File(jarPath + "/" + filePath);
         if (file.exists()) {
-            Transaction[] loadedTransactions = gson.fromJson(new java.io.FileReader(file), Transaction[].class);
-            if (loadedTransactions != null) {
-                transactions = new ArrayList<>(List.of(loadedTransactions));
-            }
+            Reader reader = new FileReader(file);
+            Type type = new TypeToken<HashMap<String, Object>>() {}.getType();
+            data = gson.fromJson(reader, type);
+            transactions = (List<Transaction>) data.get("transactions");
+            System.out.println(data.toString());
+            System.out.println(transactions.toString());
         }
     }
 
