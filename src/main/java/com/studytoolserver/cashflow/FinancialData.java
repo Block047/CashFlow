@@ -20,6 +20,7 @@ public class FinancialData {
 
     public static void addTransaction(Transaction transaction) throws Exception {
         transactions.add(transaction);
+        data.put("transactions", transactions);
         System.out.println(transaction.toString());
         System.out.println(transactions.toString());
         save();
@@ -78,7 +79,9 @@ public class FinancialData {
             Reader reader = new FileReader(file);
             Type type = new TypeToken<HashMap<String, Object>>() {}.getType();
             data = gson.fromJson(reader, type);
-            transactions = (List<Transaction>) data.get("transactions");
+            String raw = gson.toJson(Collections.singletonList(data.get("transactions")));
+            Type list = new TypeToken<List<Transaction>>(){}.getType();
+            transactions = gson.fromJson(raw, list) != null ? gson.fromJson(raw,list) : new ArrayList<>();
             System.out.println(data.toString());
             System.out.println(transactions.toString());
         }
