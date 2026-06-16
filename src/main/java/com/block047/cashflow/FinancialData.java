@@ -17,6 +17,9 @@ public class FinancialData {
     static Map<String, Object> data = new HashMap<>();
     static Double budget;
     static Double savings;
+    static Double income;
+    static Double hours;
+    static Integer days;
 
     public static Double getTotalExpenses() {
         return transactions.stream()
@@ -30,6 +33,24 @@ public class FinancialData {
                 .filter(t -> t.getAmount() > 0)
                 .mapToDouble(Transaction::getAmount)
                 .sum();
+    }
+
+    public static void setIncome(Double income) throws Exception {
+        FinancialData.income = income;
+        data.put("income",income);
+        save();
+    }
+
+    public static void setHours(Double hours) throws Exception {
+        FinancialData.hours = hours;
+        data.put("hours",hours);
+        save();
+    }
+
+    public static void setDays(Integer days) throws Exception {
+        FinancialData.days = days;
+        data.put("days",days);
+        save();
     }
 
     public static void setBudget(Double budget) throws Exception {
@@ -47,10 +68,10 @@ public class FinancialData {
     public static Double getBudget() {
         return budget;
     }
-
-    public static Double getSavings() {
-        return savings;
-    }
+    public static Double getSavings() {return savings;}
+    public static Double getIncome(){return income;}
+    public static Double getHours(){return hours;}
+    public static Integer getDays(){return days;}
 
     public static void addTransaction(Transaction transaction) throws Exception {
         transactions.add(transaction);
@@ -118,6 +139,9 @@ public class FinancialData {
             transactions = gson.fromJson(raw, list) != null ? gson.fromJson(raw,list) : new ArrayList<>();
             savings = data.get("savings") != null ? ((Number) data.get("savings")).doubleValue() : 0.0;
             budget = data.get("budget") != null ? ((Number) data.get("budget")).doubleValue() : 0.0;
+            income = data.get("income") != null ? ((Number)data.get("income")).doubleValue() : 0.0;
+            hours = data.get("hours") != null ? ((Number)data.get("hours")).doubleValue() : 0.0;
+            days = data.get("days") != null ? ((Number)data.get("days")).intValue() : 0;
             reader.close();
         }
     }

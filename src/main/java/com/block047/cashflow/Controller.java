@@ -277,6 +277,7 @@ public class Controller {
 
         // Progress arc
         gc.setStroke(percentage >= 1.0 ? Color.web("#e13b12") : Color.web("#1b9c1b"));
+        //add thing to prevent - arc thing bc like with savingszz not isse witb budget
         gc.strokeArc(padding, padding, arcSize, arcSize, 225, (-270 * percentage) > -270 ? -270 * percentage : -270, ArcType.OPEN);
 
         savingLabel.setText(String.format("%.0f%%", percentage * 100));

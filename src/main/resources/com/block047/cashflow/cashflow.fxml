@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" prefHeight="869.0" prefWidth="1429.0" spacing="20.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/25.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.block047.cashflow.Controller">
+<VBox alignment="TOP_CENTER" prefHeight="869.0" prefWidth="1429.0" spacing="20.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.block047.cashflow.Controller">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -74,11 +74,10 @@
             </content>
          </ScrollPane>
          <Region prefHeight="643.0" prefWidth="32.0" />
-         <VBox fx:id="financialHistory1" alignment="TOP_CENTER" prefHeight="643.0" prefWidth="705.0" style="-fx-padding: 20; -fx-max-height: Infinity; -fx-background-color: #676767; -fx-border-color: #434343; -fx-border-width: 4;">
+         <VBox fx:id="financialHistory1" alignment="CENTER_LEFT" prefHeight="643.0" prefWidth="705.0" style="-fx-padding: 20; -fx-max-height: Infinity; -fx-background-color: #676767; -fx-border-color: #434343; -fx-border-width: 4;">
             <children>
-               <HBox prefHeight="100.0" prefWidth="200.0">
+               <VBox alignment="CENTER" maxWidth="250.0" prefHeight="492.0" prefWidth="247.0">
                   <children>
-                     <Region prefHeight="200.0" prefWidth="447.0" />
                      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                         <children>
                             <StackPane prefHeight="204.0" prefWidth="200.0">
@@ -104,41 +103,39 @@
                                  <Font name="Inter Light" size="13.0" />
                               </font>
                            </Button>
-                        </children>
-                     </VBox>
-                     <Region prefHeight="218.0" prefWidth="414.0" />
-                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                        <children>
-                           <StackPane prefHeight="200.0" prefWidth="630.0">
+                           <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                               <children>
-                                 <Label fx:id="savingLabel" alignment="CENTER" text="0%" translateY="-5.0">
+                                 <StackPane prefHeight="200.0" prefWidth="630.0">
+                                    <children>
+                                       <Label fx:id="savingLabel" alignment="CENTER" text="0%" translateY="-5.0">
+                                          <font>
+                                             <Font name="Inter Bold" size="26.0" />
+                                          </font>
+                                       </Label>
+                                       <Canvas fx:id="savingCanvas" height="200" width="200" />
+                                       <Label fx:id="savingsFraction" alignment="CENTER" text="0/0" translateY="20.0">
+                                          <font>
+                                             <Font name="Inter Bold" size="13.0" />
+                                          </font>
+                                       </Label>
+                                    </children>
+                                 </StackPane>
+                                 <Label text="Savings Progress" translateY="-30.0">
                                     <font>
-                                       <Font name="Inter Bold" size="26.0" />
+                                       <Font name="Inter Bold" size="14.0" />
                                     </font>
                                  </Label>
-                                 <Canvas fx:id="savingCanvas" height="200" width="200" />
-                                 <Label fx:id="savingsFraction" alignment="CENTER" text="0/0" translateY="20.0">
+                                 <Button mnemonicParsing="false" onMouseClicked="#setSavings" onMouseEntered="#handleEnter" onMouseExited="#handleExit" style="-fx-background-color: #dfdfdf;" text="Set Savings Goal" translateY="-20.0">
                                     <font>
-                                       <Font name="Inter Bold" size="13.0" />
+                                       <Font name="Inter Light" size="13.0" />
                                     </font>
-                                 </Label>
+                                 </Button>
                               </children>
-                           </StackPane>
-                           <Label text="Savings Progress" translateY="-30.0">
-                              <font>
-                                 <Font name="Inter Bold" size="14.0" />
-                              </font>
-                           </Label>
-                           <Button mnemonicParsing="false" onMouseClicked="#setSavings" onMouseEntered="#handleEnter" onMouseExited="#handleExit" style="-fx-background-color: #dfdfdf;" text="Set Savings Goal" translateY="-20.0">
-                              <font>
-                                 <Font name="Inter Light" size="13.0" />
-                              </font>
-                           </Button>
+                           </VBox>
                         </children>
                      </VBox>
-                     <Region prefHeight="216.0" prefWidth="453.0" />
                   </children>
-               </HBox>
+               </VBox>
             </children>
          </VBox>
       </children>
