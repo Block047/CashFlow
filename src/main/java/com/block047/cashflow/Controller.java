@@ -1,4 +1,4 @@
-package com.studytoolserver.cashflow;
+package com.block047.cashflow;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,11 +34,15 @@ public class Controller {
     @FXML private Label budgetLabel;
     @FXML private Canvas savingCanvas;
     @FXML private Label savingLabel;
+    @FXML private Label budgetFraction;
+    @FXML private Label savingsFraction;
 
     public void updateMoney() {
         System.out.println("balance node: " + balance);
         System.out.println("total: " + FinancialData.getTotalCashFlow());
         balance.setText(String.format("$%,.2f", FinancialData.getTotalCashFlow()));
+        updateGoalProgress();
+        updateBudgetProgress();
     }
 
     public void updateTransactions(){
@@ -222,7 +226,6 @@ public class Controller {
             filler.setFont(Font.font("Inter Regular", 16.0));
             container.getChildren().add(2, filler);
         }
-
         updateMoney();
     }
 
@@ -235,6 +238,7 @@ public class Controller {
     }
 
     public void setBudgetProgress(double percentage) {
+        System.out.println("percentage: " + percentage);
         double size = 200;
         double padding = 35;
         double arcSize = size - (padding * 2);
@@ -251,7 +255,7 @@ public class Controller {
 
         // Progress arc
         gc.setStroke(percentage >= 1.0 ? Color.web("#e13b12") : Color.web("#1b9c1b"));
-        gc.strokeArc(padding, padding, arcSize, arcSize, 225, -270 * percentage, ArcType.OPEN);
+        gc.strokeArc(padding, padding, arcSize, arcSize, 225, (-270 * percentage) > -270 ? -270 * percentage : -270, ArcType.OPEN);
 
         budgetLabel.setText(String.format("%.0f%%", percentage * 100));
     }
@@ -273,8 +277,70 @@ public class Controller {
 
         // Progress arc
         gc.setStroke(percentage >= 1.0 ? Color.web("#e13b12") : Color.web("#1b9c1b"));
-        gc.strokeArc(padding, padding, arcSize, arcSize, 225, -270 * percentage, ArcType.OPEN);
+        gc.strokeArc(padding, padding, arcSize, arcSize, 225, (-270 * percentage) > -270 ? -270 * percentage : -270, ArcType.OPEN);
 
         savingLabel.setText(String.format("%.0f%%", percentage * 100));
+    }
+
+    public void updateGoalProgress(){
+        if (FinancialData.getSavings() == null || FinancialData.getSavings() == 0.0){
+            setGoalProgress(0);
+            budgetFraction.setText("Budget not set.");
+        } else {
+            System.out.println("Expenses" + FinancialData.getTotalCashFlow());
+            System.out.println("Budget" + FinancialData.getBudget());
+            setGoalProgress(FinancialData.getTotalCashFlow()/FinancialData.getSavings());
+            savingsFraction.setText(STR."\{FinancialData.getTotalCashFlow()} / \{FinancialData.getSavings()}");
+        }
+    }
+
+    public void updateBudgetProgress(){
+        if (FinancialData.getBudget() == null || FinancialData.getBudget() == 0.0){
+            setBudgetProgress(0);
+            budgetFraction.setText("Budget not set.");
+        } else {
+            System.out.println("Expenses" + FinancialData.getTotalExpenses());
+            System.out.println("Budget" + FinancialData.getBudget());
+            budgetFraction.setText(STR."\{-FinancialData.getTotalExpenses()} / \{FinancialData.getBudget()}");
+            if (-FinancialData.getTotalExpenses() / FinancialData.getBudget() <= 0){
+                setBudgetProgress(0.0);
+                budgetFraction.setText(STR."\{FinancialData.getTotalExpenses()} / \{FinancialData.getBudget()}");
+            } else {
+                setBudgetProgress(-FinancialData.getTotalExpenses() / FinancialData.getBudget());
+                budgetFraction.setText(STR."\{-FinancialData.getTotalExpenses()} / \{FinancialData.getBudget()}");
+            }
+        }
+    }
+
+    public void setBudget() throws Exception {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Set Budget");
+        dialog.setHeaderText("Enter your desired budget for the month.");
+        TextField amt = new TextField();
+        amt.setPromptText("Amount");
+        dialog.getDialogPane().setContent(amt);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isEmpty() || result.get() != ButtonType.OK) {
+            return;
+        }
+        FinancialData.setBudget(amt.getText().isEmpty() ? 0.0 : Double.parseDouble(amt.getText()));
+        updateMoney();
+    }
+
+    public void setSavings() throws Exception {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Set Budget");
+        dialog.setHeaderText("Enter your desired savings goal for the month.");
+        TextField amt = new TextField();
+        amt.setPromptText("Amount");
+        dialog.getDialogPane().setContent(amt);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isEmpty() || result.get() != ButtonType.OK) {
+            return;
+        }
+        FinancialData.setSavings(amt.getText().isEmpty() ? 0.0 : Double.parseDouble(amt.getText()));
+        updateMoney();
     }
 }

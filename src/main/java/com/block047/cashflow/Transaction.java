@@ -1,4 +1,4 @@
-package com.studytoolserver.cashflow;
+package com.block047.cashflow;
 
 //The transaction class :)
 

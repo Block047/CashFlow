@@ -1,4 +1,4 @@
-package com.studytoolserver.cashflow;
+package com.block047.cashflow;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -17,6 +17,40 @@ public class FinancialData {
     static Map<String, Object> data = new HashMap<>();
     static Double budget;
     static Double savings;
+
+    public static Double getTotalExpenses() {
+        return transactions.stream()
+                .filter(t -> t.getAmount() < 0)
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+    }
+
+    public static Double getTotalIncome() {
+        return transactions.stream()
+                .filter(t -> t.getAmount() > 0)
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+    }
+
+    public static void setBudget(Double budget) throws Exception {
+        FinancialData.budget = budget;
+        data.put("budget", budget);
+        save();
+    }
+
+    public static void setSavings(Double savings) throws Exception {
+        FinancialData.savings = savings;
+        data.put("savings", savings);
+        save();
+    }
+
+    public static Double getBudget() {
+        return budget;
+    }
+
+    public static Double getSavings() {
+        return savings;
+    }
 
     public static void addTransaction(Transaction transaction) throws Exception {
         transactions.add(transaction);
@@ -79,11 +113,12 @@ public class FinancialData {
             Reader reader = new FileReader(file);
             Type type = new TypeToken<HashMap<String, Object>>() {}.getType();
             data = gson.fromJson(reader, type);
-            String raw = gson.toJson(Collections.singletonList(data.get("transactions")));
+            String raw = gson.toJson(data.get("transactions"));
             Type list = new TypeToken<List<Transaction>>(){}.getType();
             transactions = gson.fromJson(raw, list) != null ? gson.fromJson(raw,list) : new ArrayList<>();
-            System.out.println(data.toString());
-            System.out.println(transactions.toString());
+            savings = data.get("savings") != null ? ((Number) data.get("savings")).doubleValue() : 0.0;
+            budget = data.get("budget") != null ? ((Number) data.get("budget")).doubleValue() : 0.0;
+            reader.close();
         }
     }
 

@@ -7,6 +7,6 @@ module com.studytoolserver.cashflow {
     requires org.kordamp.ikonli.javafx;
     requires com.google.gson;
 
-    opens com.studytoolserver.cashflow to javafx.fxml, com.google.gson;
-    exports com.studytoolserver.cashflow;
+    opens com.block047.cashflow to javafx.fxml, com.google.gson;
+    exports com.block047.cashflow;
 }

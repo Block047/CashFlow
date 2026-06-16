@@ -1,4 +1,4 @@
-package com.studytoolserver.cashflow;
+package com.block047.cashflow;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(
-                Main.class.getResource("hello-view.fxml")
+                Main.class.getResource("cashflow.fxml")
         );
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("CashFlow");
@@ -24,13 +24,12 @@ public class Main extends Application {
 
         Controller controller = fxmlLoader.getController();
 
-        controller.setBudgetProgress(.75);
-        controller.setGoalProgress(.1);
-
         try {
             FinancialData.load();
             controller.updateMoney();
             controller.updateTransactions();
+            controller.updateBudgetProgress();
+            controller.updateGoalProgress();
         } catch (Exception e) {
             e.printStackTrace();
         }
