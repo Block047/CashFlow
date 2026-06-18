@@ -106,6 +106,8 @@ public class FinancialData {
         return transactions;
     }
 
+    public static Map<String,Object> getData(){return data;}
+
     public static Double getTotalCashFlow() {
         //Sums up all the transactions to get the total cash flow
         return transactions.stream()

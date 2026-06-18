@@ -1,5 +1,6 @@
 package com.block047.cashflow;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -26,6 +27,7 @@ public class Main extends Application {
 
         try {
             FinancialData.load();
+            Dotenv dotenv = Dotenv.load();
             controller.updateMoney();
             controller.updateTransactions();
             controller.updateBudgetProgress();

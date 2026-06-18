@@ -6,6 +6,8 @@ module com.studytoolserver.cashflow {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires com.google.gson;
+    requires java.net.http;
+    requires java.dotenv;
 
     opens com.block047.cashflow to javafx.fxml, com.google.gson;
     exports com.block047.cashflow;

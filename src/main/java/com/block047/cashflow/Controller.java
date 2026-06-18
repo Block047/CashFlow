@@ -6,6 +6,8 @@ import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -18,11 +20,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class Controller {
 
@@ -36,6 +38,8 @@ public class Controller {
     @FXML private Label savingLabel;
     @FXML private Label budgetFraction;
     @FXML private Label savingsFraction;
+    @FXML private VBox chatContainer;
+    @FXML private TextField userMessage;
 
     public void updateMoney() {
         System.out.println("balance node: " + balance);
@@ -55,6 +59,25 @@ public class Controller {
             financialHistory.getChildren().add(createTransactionRow(t.getAmount(), t.getDescription(), t.getDate()));
             financialHistory.getChildren().add(spacer);
         }
+    }
+
+    public void createNewMessage(boolean isAI, String message){
+        Label label = new Label(message);
+        label.prefWidth(337.0);
+        label.setMinWidth(337.0);
+        label.maxHeight(1.0E32);
+        label.setStyle("-fx-background-radius: 10; -fx-label-padding: 10");
+        label.setWrapText(true);
+        if (isAI) {
+            label.setStyle(label.getStyle() + ";-fx-background-color: #929292");
+            label.setAlignment(Pos.CENTER_LEFT);
+        }else{
+            label.setStyle(label.getStyle() + "; -fx-background-color: #dfdfdf");
+            label.setAlignment(Pos.CENTER_RIGHT);
+        }
+        chatContainer.getChildren().add(label);
+        //<Label maxHeight="1.0E32" prefWidth="337.0" style="-fx-background-color: #929292; -fx-background-radius: 10; -fx-label-padding: 10;" text="Test Message" wrapText="true" />
+        //<Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.0E32" prefWidth="337.0" style="-fx-background-color: #dfdfdf; -fx-background-radius: 10; -fx-label-padding: 10; -fx-alignment: right;" text="Test Message" textAlignment="RIGHT" wrapText="true" />
     }
 
     private HBox createTransactionRow(Double moneyChange, String reasonCost, Long date) {
@@ -286,7 +309,7 @@ public class Controller {
     public void updateGoalProgress(){
         if (FinancialData.getSavings() == null || FinancialData.getSavings() == 0.0){
             setGoalProgress(0);
-            budgetFraction.setText("Budget not set.");
+            savingsFraction.setText("Savings not set.");
         } else {
             System.out.println("Expenses" + FinancialData.getTotalCashFlow());
             System.out.println("Budget" + FinancialData.getBudget());
@@ -343,5 +366,23 @@ public class Controller {
         }
         FinancialData.setSavings(amt.getText().isEmpty() ? 0.0 : Double.parseDouble(amt.getText()));
         updateMoney();
+    }
+
+    @FXML
+    private void handleMessage(KeyEvent e) throws IOException, InterruptedException {
+        if (e.getCode() == KeyCode.ENTER) {
+            if (!userMessage.getText().isBlank()) {
+                createNewMessage(false, userMessage.getText());
+                Map<String, Object> result = ApiHandler.requestAIResponse(userMessage.getText());
+                userMessage.setText("");
+
+                List<Map<String, Object>> choices = (List<Map<String, Object>>) result.get("choices");
+                Map<String, Object> firstChoice = choices.get(0);
+                Map<String, Object> message = (Map<String, Object>) firstChoice.get("message");
+                String content = (String) message.get("content");
+
+                createNewMessage(true, content);
+            }
+        }
     }
 }
