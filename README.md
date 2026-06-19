@@ -1,6 +1,9 @@
-# Indev, not suitable for use
+# CashFlow
 
-An application that allows for the tracking of transactions, and budgeting.  Created using JavaFX.
-This project was created with the goal of translating costs, and savings into graphical data in which users can better comprehend.
-This allows for users to better think of how they're using their money, and to set goals for saving and budgeting.
-This app can also allow for expenses to be translated to the **time** that it had costed to earn that money, provided an income is provided.
+This program allows one to track things such as their balance, and financial history.  It will also help to set budgets and stick with them, providing alerts when nearing them.  This app solves the problem of people being unable to budget their money, and impulse buying.
+
+# Installing
+1. Clone the project
+2. Create a .env file with the variables AI_KEY, and AI_MODEL.  You can get these values from groq
+3. Compile the project with maven
+4. Run the project with jdk
